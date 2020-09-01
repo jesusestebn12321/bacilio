@@ -92,7 +92,8 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
 				<th style="text-align:center;font-size: 10pt;" class='midnight-blue'>Proveedor</th>
 				<th style="text-align:center;font-size: 10pt;" class='midnight-blue'>Cantidad</th>
 				<th style="text-align:center;font-size: 10pt;" class='midnight-blue'>Agregado</th>
-				<th style="text-align:center;font-size: 10pt;" class='midnight-blue'>Precio</th>
+				<th style="text-align:center;font-size: 10pt;" class='midnight-blue'>Precio Venta</th>
+				<th style="text-align:center;font-size: 10pt;" class='midnight-blue'>Precio Compra</th>
 			</tr>
 		</thead>
 		<tbody style="width: 100% !important; text-align: left; font-size: 9pt;">
@@ -176,7 +177,10 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
 					<?php echo $date_added; ?>		
 				</td>
 				<td style="width: 10%;text-align: right;font-size: 8pt;" class="silver">
-					<?php echo $precio_producto; ?>		
+					$ <?php echo $precio_producto; ?>		
+				</td>
+				<td style="width: 10%;text-align: right;font-size: 8pt;" class="silver">
+					$ <?php echo $precio_producto; ?>		
 				</td>
 			</tr>
 		<?php

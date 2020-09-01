@@ -104,16 +104,59 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
 		//main query to fetch the data
 		$sql="SELECT * FROM  $sTable $sWhere";
 		$query = mysqli_query($con, $sql);
-		//loop through fetched data
-		while ($row=mysqli_fetch_array($query)){
+		$nConfig = mysqli_num_rows ($query);  
+  
+        if ($nConfig > 0)  
+        {  
+            for($i=0; $i<$nConfig; $i++)  
+            {  
+                $verConfig = mysqli_fetch_array($query);  
+               	
+                $CargaConfig[$i] = array('id_factura'=>$verConfig['id_factura'],
+			'numero_factura'=>$verConfig['numero_factura'],
+			'fecha'=>date("d/m/Y", strtotime($verConfig['fecha_factura'])),
+			'RUC_cliente'=>$verConfig['RUC_cliente'],
+			'ciudad_cliente'=>$verConfig['ciudad_cliente'],
+			'telefono_cliente'=>$verConfig['telefono_cliente'],
+			'nombre_vendedor'=>$verConfig['firstname']." ".$verConfig['lastname'],
+			'estado_factura'=>$verConfig['estado_factura'],
+			'total_venta'=>$verConfig['total_venta'],);
+            }
+            foreach ($CargaConfig as $key=>$item) {
+            	$cadena=$item['fecha'].'-id'.$item['id_factura'];
+            	$array_tmp[$key]=$cadena;
+            }
+            //setlocale(LC_COLLATE, 'es_ES.utf8');
+			asort($array_tmp, SORT_LOCALE_STRING);
+			
+			foreach($array_tmp as $item) {
+				# code...
+				//echo $item.'<br>';
+				$split=explode('-id', $item);
+				//var_dump($split);
+				//echo '<br>';
+				$cont=0;
+				foreach ($CargaConfig as $value) {
+					# code...
+					$count++;
+					if($value['id_factura']==$split[1]){
+						$obj[$count]=$value;
+
+					}
+				}
+			} 
+            //var_dump($obj);
+        }
+		foreach ($obj as $row){
 			$numero_factura=$row['numero_factura'];
-			$fecha=date("d/m/Y", strtotime($row['fecha_factura']));
+			$fecha=$row['fecha'];
 			$RUC_cliente=$row['RUC_cliente'];
-			$nombre_vendedor=$row['firstname']." ".$row['lastname'];
+			$nombre_vendedor=$row['nombre_vendedor'];
 			$estado_factura=$row['estado_factura'];
+			$total_venta=$row['total_venta'];
 			if ($estado_factura==1){$text_estado="Pagada";$label_class='label-success';}
 			else{$text_estado="Pendiente";$label_class='label-warning';}
-			$total_venta=$row['total_venta'];
+
 		?>
 			<tr>
 				<td style="width: 1%;text-align: center;font-size: 11pt;" class="silver">
