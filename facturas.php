@@ -21,13 +21,14 @@
   <body>
 	<?php
 	include("navbar.php");
+	include("modal/print_factura.php");
 	?>  
     <div class="container">
 		<div class="panel panel-info">
 		<div class="panel-heading">
 		    <div class="container-fluid">
 				<div class="col-md-2 btn-group pull-right">
-					<a id="all_facturas" href="#!" class="btn btn-info"><span class="glyphicon glyphicon-print" ></span> Imprimir</a>
+					<a href="#!" class="btn btn-info" data-toggle='modal' data-target='#print_factura'><span class="glyphicon glyphicon-print" ></span> Imprimir</a>
 				</div>
 
 			    <div class="col-md-2 btn-group pull-right">
@@ -71,5 +72,28 @@
 	?>
 	<script type="text/javascript" src="js/VentanaCentrada.js"></script>
 	<script type="text/javascript" src="js/facturas.js"></script>
+	<script>
+		var date = new Date();
+		var month=date.getMonth()+1;
+		var date_now = date.getFullYear()+"-0"+month+"-" +date.getDate();
+		$('#btn_print_factura').click(function(e){
+			var print_after=$('#print_after').val();
+			var print_before=$('#print_before').val();
+			console.log(print_after);
+			/*debugger;*/
+			if(print_before>print_after){
+				toastr['error']('El rango de fecha es incorrecto. "Desde tiene que ser menor que hasta" ','Error');
+				//$('#print_before').focus();
+				e.preventDefault();
+				return false;
+			}else{
+				
+					VentanaCentrada('./pdf/documentos/all_facturas.php?&print_after='+print_after+'&print_before='+print_before+'?Factura','','1024','768','true');
+					
+					
+				
+			}
+		});
+	</script>
   </body>
 </html>

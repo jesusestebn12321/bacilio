@@ -96,19 +96,12 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
 		</thead>
 		<tbody style="width: 100% !important; text-align: left; font-size: 9pt;">
 		<?php
- 		$q = mysqli_real_escape_string($con,(strip_tags($_REQUEST['q'], ENT_QUOTES)));
-		$sTable = "facturas, clientes, users";
-		$sWhere = "";
-		$sWhere.=" WHERE facturas.id_cliente=clientes.id_cliente and facturas.id_vendedor=users.user_id";
-		$sWhere.=" order by facturas.id_factura desc";
-		//main query to fetch the data
-		$sql="SELECT * FROM  $sTable $sWhere";
-		$query = mysqli_query($con, $sql);
-		$nConfig = mysqli_num_rows ($query);  
+ 		
+		$query = mysqli_query($con, $sql_count);
   
-        if ($nConfig > 0)  
+        if ($count > 0)  
         {  
-            for($i=0; $i<$nConfig; $i++)  
+            for($i=0; $i<$count; $i++)  
             {  
                 $verConfig = mysqli_fetch_array($query);  
                	
@@ -147,11 +140,15 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
 			} 
             //var_dump($obj);
         }
-		foreach ($obj as $row){
+        while($row= mysqli_fetch_array($sql_count)){
+        	$query_vendedor=mysqli_query($con,"select * from users where user_id=".$row['id_vendedor'].";");
+        	$query_cliente=mysqli_query($con,"select * from clientes where id_cliente=".$row['id_cliente'].";");
+        	$row_q_cliente=mysqli_fetch_array($query_cliente);
+        	$row_q_vendedor=mysqli_fetch_array($query_vendedor);
 			$numero_factura=$row['numero_factura'];
-			$fecha=$row['fecha'];
-			$RUC_cliente=$row['RUC_cliente'];
-			$nombre_vendedor=$row['nombre_vendedor'];
+			$fecha=date("d/m/Y", strtotime($row['fecha_factura']));;
+			$RUC_cliente=$row_q_cliente['RUC_cliente'];
+			$nombre_vendedor=$row_q_vendedor['firstname']." ".$row_q_vendedor['lastname'];
 			$estado_factura=$row['estado_factura'];
 			$total_venta=$row['total_venta'];
 			if ($estado_factura==1){$text_estado="Pagada";$label_class='label-success';}
